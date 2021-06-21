@@ -1,7 +1,7 @@
 {
-  "name": "MyModName",
+  "name": "ChillDrone",
   "version_number": "1.0.0",
-  "website_url": "https://github.com/cheeeeeeeeeen/RoR2-ChensTemplate",
+  "website_url": "https://github.com/cheeeeeeeeeen/RoR2-ChillDrone",
   "description": "My mod's description goes here.",
   "dependencies": [
     "bbepis-BepInExPack-5.3.1",

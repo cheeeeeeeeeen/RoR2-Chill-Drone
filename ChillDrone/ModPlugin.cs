@@ -8,16 +8,16 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using static Chen.Helpers.GeneralHelpers.AssetsManager;
 
-[assembly: InternalsVisibleTo("ChensTemplate.Tests")]
+[assembly: InternalsVisibleTo("ChillDrone.Tests")]
 
-namespace My.Mod.Namespace
+namespace Chen.ChillDrone
 {
     /// <summary>
     /// Description of the plugin.
     /// </summary>
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [BepInDependency(R2API.R2API.PluginGUID, R2API.R2API.PluginVersion)]
-    [BepInDependency(Chen.Helpers.HelperPlugin.ModGuid, Chen.Helpers.HelperPlugin.ModVer)]
+    [BepInDependency(Helpers.HelperPlugin.ModGuid, Helpers.HelperPlugin.ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency()]
     public class MyModPluginPlugin : BaseUnityPlugin
@@ -34,12 +34,12 @@ namespace My.Mod.Namespace
         /// <summary>
         /// This mod's name.
         /// </summary>
-        public const string ModName = "MyModName";
+        public const string ModName = "ChillDrone";
 
         /// <summary>
         /// This mod's GUID.
         /// </summary>
-        public const string ModGuid = "com.Chen.MyModName";
+        public const string ModGuid = "com.Chen.ChillDrone";
 
         internal static Log Log;
         internal static AssetBundle bundle;
@@ -51,10 +51,8 @@ namespace My.Mod.Namespace
 #if DEBUG
             Chen.Helpers.GeneralHelpers.MultiplayerTest.Enable(Log);
 #endif
-            BundleInfo assetBundle = new BundleInfo("ChensTemplate.mymod_assets", BundleType.UnityAssetBundle);
-            BundleInfo soundBank = new BundleInfo("ChensTemplate.mymod_sounds.bnk", BundleType.WWiseSoundBank);
+            BundleInfo assetBundle = new BundleInfo("ChillDrone.mymod_assets", BundleType.UnityAssetBundle);
             bundle = new AssetsManager(assetBundle).Register() as AssetBundle;
-            new AssetsManager(soundBank).Register();
         }
 
         internal static bool DebugCheck()

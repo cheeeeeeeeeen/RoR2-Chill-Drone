@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace My.Mod.Namespace.Tests
+namespace Chen.ChillDrone.Tests
 {
     [TestClass]
     public class ModPlugin
