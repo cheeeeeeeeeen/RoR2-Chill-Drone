@@ -8,8 +8,8 @@
     <ProjectGuid>{F2BE652C-37C7-438D-9597-A733F35352BC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChensTemplate.Tests</RootNamespace>
-    <AssemblyName>ChensTemplate.Tests</AssemblyName>
+    <RootNamespace>Chen.ChillDrone.Tests</RootNamespace>
+    <AssemblyName>ChillDrone.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -40,11 +40,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BepInEx">
-      <HintPath>..\ChensTemplate\lib\BepInEx.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\ChillDrone\lib\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="ChensTemplate">
-      <HintPath>..\ChensTemplate\Build\ChensTemplate.dll</HintPath>
+    <Reference Include="BepInEx">
+      <HintPath>..\ChillDrone\lib\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="ChensHelpers">
+      <HintPath>..\ChillDrone\lib\ChensHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="ChillDrone">
+      <HintPath>..\ChillDrone\Build\ChillDrone.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
@@ -52,13 +58,28 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>..\ChillDrone\lib\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="R2API">
+      <HintPath>..\ChillDrone\lib\R2API.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
-      <HintPath>..\ChensTemplate\lib\UnityEngine.dll</HintPath>
+      <HintPath>..\ChillDrone\lib\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\ChillDrone\lib\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\ChensTemplate\lib\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\ChillDrone\lib\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>..\ChillDrone\lib\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\ChillDrone\lib\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

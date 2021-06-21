@@ -5,6 +5,7 @@
     <Version>1.0.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
+    <RootNamespace>Chen.ChillDrone</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -16,6 +17,14 @@
     <WarningLevel>5</WarningLevel>
     <DocumentationFile>..\docs\ChillDrone.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="chilldrone_assets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="chilldrone_assets" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.11.0">
@@ -62,6 +71,6 @@
   </Target>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(ProjectDir)Build&quot;&#xD;&#xA;cd &quot;$(ProjectDir)Build&quot;&#xD;&#xA;del * /Q&#xD;&#xA;xcopy &quot;$(TargetPath)&quot; /Y&#xD;&#xA;if '$(ConfigurationName)' == 'Debug' (&#xD;&#xA;  copy &quot;$(ProjectDir)ModMeta&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)README.md&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)LICENSE.txt&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)docs\$(TargetName).xml&quot; . /Y&#xD;&#xA;  7z a Build.zip .\* -x!Build.zip -x!old_*&#xD;&#xA;  mkdir &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot;&#xD;&#xA;  copy &quot;$(TargetName).xml&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;  copy &quot;$(TargetFileName)&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;)" />
+    <Exec Command="mkdir &quot;$(ProjectDir)Build&quot;&#xD;&#xA;cd &quot;$(ProjectDir)Build&quot;&#xD;&#xA;del * /Q&#xD;&#xA;xcopy &quot;$(TargetPath)&quot; /Y&#xD;&#xA;if '$(ConfigurationName)' == 'Debug' (&#xD;&#xA;  copy &quot;$(ProjectDir)ModMeta&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)README.md&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)LICENSE.txt&quot; . /Y&#xD;&#xA;  7z a Build.zip .\* -x!Build.zip -x!old_*&#xD;&#xA;  mkdir &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot;&#xD;&#xA;  copy &quot;$(TargetName).xml&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;  copy &quot;$(TargetFileName)&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;)" />
   </Target>
 </Project>

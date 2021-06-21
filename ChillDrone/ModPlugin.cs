@@ -20,7 +20,7 @@ namespace Chen.ChillDrone
     [BepInDependency(Helpers.HelperPlugin.ModGuid, Helpers.HelperPlugin.ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency()]
-    public class MyModPluginPlugin : BaseUnityPlugin
+    public class ModPlugin : BaseUnityPlugin
     {
         /// <summary>
         /// This mod's version.

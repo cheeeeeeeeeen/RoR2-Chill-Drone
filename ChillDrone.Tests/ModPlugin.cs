@@ -8,7 +8,7 @@ namespace Chen.ChillDrone.Tests
         [TestMethod]
         public void DebugCheck_Toggled_ReturnsFalse()
         {
-            bool result = MyModPluginPlugin.DebugCheck();
+            bool result = ChillDrone.ModPlugin.DebugCheck();
 
             Assert.IsFalse(result);
         }
