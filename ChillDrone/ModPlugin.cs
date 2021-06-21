@@ -1,9 +1,13 @@
 ﻿#undef DEBUG
 
 using BepInEx;
+using BepInEx.Configuration;
+using Chen.GradiusMod.Drones;
 using Chen.Helpers.GeneralHelpers;
 using Chen.Helpers.LogHelpers;
 using R2API.Utils;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static Chen.Helpers.GeneralHelpers.AssetsManager;
@@ -42,18 +46,33 @@ namespace Chen.ChillDrone
         /// </summary>
         public const string ModGuid = "com.Chen.ChillDrone";
 
+        internal static ConfigFile cfgFile;
         internal static Log Log;
-        internal static AssetBundle bundle;
+        internal static List<DroneInfo> dronesList = new List<DroneInfo>();
+        internal static AssetBundle assetBundle;
+        internal static ContentProvider contentProvider;
 
         private void Awake()
         {
             Log = new Log(Logger);
+            contentProvider = new ContentProvider();
 
 #if DEBUG
             Chen.Helpers.GeneralHelpers.MultiplayerTest.Enable(Log);
 #endif
-            BundleInfo assetBundle = new BundleInfo("ChillDrone.chilldrone_assets", BundleType.UnityAssetBundle);
-            bundle = new AssetsManager(assetBundle).Register() as AssetBundle;
+
+            Log.Debug("Initializing config file...");
+            cfgFile = new ConfigFile(Path.Combine(Paths.ConfigPath, ModGuid + ".cfg"), true);
+
+            Log.Debug("Loading asset bundle...");
+            BundleInfo bundleInfo = new BundleInfo("Chen.ChillDrone.chilldrone_assets", BundleType.UnityAssetBundle);
+            assetBundle = new AssetsManager(bundleInfo).Register() as AssetBundle;
+
+            Log.Debug("Registering Chill Drone...");
+            dronesList = DroneCatalog.Initialize(ModGuid, cfgFile);
+            DroneCatalog.ScopedSetupAll(dronesList);
+
+            contentProvider.Initialize();
         }
 
         internal static bool DebugCheck()

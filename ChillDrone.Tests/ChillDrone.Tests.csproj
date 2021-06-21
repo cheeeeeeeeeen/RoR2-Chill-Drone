@@ -46,6 +46,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\ChillDrone\lib\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="ChensGradiusMod">
+      <HintPath>..\ChillDrone\lib\ChensGradiusMod.dll</HintPath>
+    </Reference>
     <Reference Include="ChensHelpers">
       <HintPath>..\ChillDrone\lib\ChensHelpers.dll</HintPath>
     </Reference>
@@ -83,6 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drone\ChillDrone.cs" />
     <Compile Include="ModPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
