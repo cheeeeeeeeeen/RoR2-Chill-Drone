@@ -4,8 +4,9 @@
   "website_url": "https://github.com/cheeeeeeeeeen/RoR2-ChillDrone",
   "description": "My mod's description goes here.",
   "dependencies": [
-    "bbepis-BepInExPack-5.3.1",
-    "tristanmcpherson-R2API-2.5.14",
-    "Chen-ChensHelpers-1.0.2"
+    "bbepis-BepInExPack-5.4.9",
+    "tristanmcpherson-R2API-3.0.44",
+    "Chen-ChensHelpers-1.0.11",
+    "Chen-ChensGradiusMod-3.3.8"
   ]
 }

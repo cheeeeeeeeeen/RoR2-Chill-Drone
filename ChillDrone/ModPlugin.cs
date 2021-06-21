@@ -13,11 +13,12 @@ using static Chen.Helpers.GeneralHelpers.AssetsManager;
 namespace Chen.ChillDrone
 {
     /// <summary>
-    /// Description of the plugin.
+    /// Unity Plugin to set the Chill Drone up.
     /// </summary>
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [BepInDependency(R2API.R2API.PluginGUID, R2API.R2API.PluginVersion)]
     [BepInDependency(Helpers.HelperPlugin.ModGuid, Helpers.HelperPlugin.ModVer)]
+    [BepInDependency(GradiusMod.GradiusModPlugin.ModGuid, GradiusMod.GradiusModPlugin.ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency()]
     public class ModPlugin : BaseUnityPlugin
@@ -51,7 +52,7 @@ namespace Chen.ChillDrone
 #if DEBUG
             Chen.Helpers.GeneralHelpers.MultiplayerTest.Enable(Log);
 #endif
-            BundleInfo assetBundle = new BundleInfo("ChillDrone.mymod_assets", BundleType.UnityAssetBundle);
+            BundleInfo assetBundle = new BundleInfo("ChillDrone.chilldrone_assets", BundleType.UnityAssetBundle);
             bundle = new AssetsManager(assetBundle).Register() as AssetBundle;
         }
 
