@@ -14,14 +14,18 @@ using RoR2.Skills;
 using System.Collections.Generic;
 using UnityEngine;
 using static Chen.ChillDrone.ModPlugin;
+using static R2API.DamageAPI;
 using static R2API.DirectorAPI;
+using static R2API.RecalculateStatsAPI;
 using UnityObject = UnityEngine.Object;
 
 namespace Chen.ChillDrone.Drone
 {
     internal class ChillDrone : Drone<ChillDrone>
     {
-        public InteractableSpawnCard iSpawnCard { get; set; }
+        public static ModdedDamageType chillOnHit { get; private set; }
+        public static BuffDef chillBuff { get; private set; }
+        public static InteractableSpawnCard iSpawnCard { get; private set; }
 
         public override bool canHaveOptions => true;
 
@@ -127,7 +131,27 @@ namespace Chen.ChillDrone.Drone
         protected override void SetupBehavior()
         {
             base.SetupBehavior();
+            chillOnHit = ReserveDamageType();
+            chillBuff = ScriptableObject.CreateInstance<BuffDef>();
+            chillBuff.canStack = false;
+            chillBuff.isDebuff = true;
+            chillBuff.name = "Chill Drone - Chilled";
+            chillBuff.iconSprite = assetBundle.LoadAsset<Sprite>("Assets/texBuffChill.png");
+            BuffAPI.Add(new CustomBuff(chillBuff));
             InteractableActions += DirectorAPI_InteractableActions;
+            GetStatCoefficients += ChillDrone_GetStatCoefficients;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+        }
+
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            orig(self, damageInfo);
+            if (damageInfo.HasModdedDamageType(chillOnHit)) self.body.AddTimedBuff(chillBuff, 1f);
+        }
+
+        private void ChillDrone_GetStatCoefficients(CharacterBody sender, StatHookEventArgs args)
+        {
+            if (sender.HasBuff(chillBuff)) args.moveSpeedMultAdd -= .7f;
         }
 
         private void DirectorAPI_InteractableActions(List<DirectorCardHolder> arg1, StageInfo arg2)

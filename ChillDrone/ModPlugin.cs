@@ -24,7 +24,7 @@ namespace Chen.ChillDrone
     [BepInDependency(Helpers.HelperPlugin.ModGuid, Helpers.HelperPlugin.ModVer)]
     [BepInDependency(GradiusMod.GradiusModPlugin.ModGuid, GradiusMod.GradiusModPlugin.ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    [R2APISubmoduleDependency()]
+    [R2APISubmoduleDependency("DamageAPI", "RecalculateStatsAPI")]
     public class ModPlugin : BaseUnityPlugin
     {
         /// <summary>

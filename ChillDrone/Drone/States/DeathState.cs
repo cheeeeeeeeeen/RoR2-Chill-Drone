@@ -7,6 +7,6 @@ namespace Chen.ChillDrone.Drone.States
     {
         protected override bool SpawnInteractable { get; set; } = ChillDrone.instance.canBeRepurchased;
 
-        protected override InteractableSpawnCard GetInteractableSpawnCard => ChillDrone.instance.iSpawnCard;
+        protected override InteractableSpawnCard GetInteractableSpawnCard => ChillDrone.iSpawnCard;
     }
 }
