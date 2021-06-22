@@ -20,8 +20,9 @@ namespace Chen.ChillDrone.Drone.States
         private static float force { get => fireBeamInstance.force; }
         private static GameObject hitEffectPrefab { get => fireBeamInstance.hitEffectPrefab; }
 
-        private static readonly float detectionDistance = 100f;
-        private static readonly float angularDetection = 15f;
+        public static readonly float detectionDistance = 30f;
+
+        private static readonly float angularDetection = 45f;
         private static readonly string muzzleString = "Muzzle";
         private static readonly float maxDistance = detectionDistance * 2f;
         private static readonly float duration = 5f;
@@ -122,7 +123,7 @@ namespace Chen.ChillDrone.Drone.States
             {
                 HurtBox hurtBox = results[i];
                 GameObject laserInstance = laserEffectInstances[i];
-                if (hurtBox)
+                if (hurtBox && hurtBox.healthComponent && hurtBox.healthComponent.alive)
                 {
                     Transform laserEndTransform = laserEffectInstanceEndTransforms[i];
                     Vector3 end = hurtBox.transform.position;
@@ -139,10 +140,17 @@ namespace Chen.ChillDrone.Drone.States
                         laserEndTransform.position = point;
                     }
                 }
-                else if (laserInstance) Destroy(laserInstance);
+                else if (laserInstance)
+                {
+                    Destroy(laserInstance);
+                    results.RemoveAt(i);
+                    laserEffectInstances.RemoveAt(i);
+                    laserEffectInstanceEndTransforms.RemoveAt(i);
+                    i--;
+                }
             }
             if (fireTimer > num2) fireTimer = 0f;
-            if (isAuthority && stopwatch >= duration) outer.SetNextStateToMain();
+            if (isAuthority && (stopwatch >= duration || results.Count == 0)) outer.SetNextStateToMain();
         }
 
         public override void OnExit()

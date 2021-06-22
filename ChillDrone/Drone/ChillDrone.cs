@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿#undef DEBUG
 
 using Chen.ChillDrone.Drone.States;
 using Chen.GradiusMod;
@@ -36,6 +36,7 @@ namespace Chen.ChillDrone.Drone
 
         private static InteractableSpawnCard interactableSpawnCardBasis { get => Resources.Load<InteractableSpawnCard>("spawncards/interactablespawncard/iscBrokenDrone1"); }
         private static SkillDef skillBasis { get => Resources.Load<SkillDef>("skilldefs/drone1body/Drone1BodyGun"); }
+        private static GameObject flameDroneMaster { get => Resources.Load<GameObject>("prefabs/charactermasters/FlameDroneMaster"); }
 
         protected override GameObject DroneCharacterMasterObject => droneMaster;
 
@@ -57,21 +58,32 @@ namespace Chen.ChillDrone.Drone
             SummonMasterBehavior summonMasterBehavior = brokenObject.GetComponent<SummonMasterBehavior>();
             droneMaster = summonMasterBehavior.masterPrefab.InstantiateClone($"{name}Master", true);
             contentProvider.masterObjects.Add(droneMaster);
-            AISkillDriver[] skillDrivers = droneMaster.GetComponents<AISkillDriver>();
-            skillDrivers.SetAllDriversToAimTowardsEnemies();
+            foreach (var skillDriver in droneMaster.GetComponents<AISkillDriver>())
+            {
+                UnityObject.Destroy(skillDriver);
+            }
+            AISkillDriver[] newSkillDrivers = flameDroneMaster.DeepCopyComponentsTo<AISkillDriver>(droneMaster).ToArray();
+            newSkillDrivers[1].maxDistance = EmitSlow.detectionDistance;
+            newSkillDrivers[2].maxDistance = newSkillDrivers[1].maxDistance + 15f;
+            newSkillDrivers[3].minDistance = newSkillDrivers[2].maxDistance;
+            newSkillDrivers.SetAllDriversToAimTowardsEnemies();
             CharacterMaster master = droneMaster.GetComponent<CharacterMaster>();
             droneBody = master.bodyPrefab.InstantiateClone($"{name}Body", true);
             contentProvider.bodyObjects.Add(droneBody);
             CharacterBody body = droneBody.GetComponent<CharacterBody>();
             body.baseNameToken = "CHILL_DRONE_NAME";
+            body.baseMaxHealth *= .9f;
             body.baseRegen *= 3;
             body.baseDamage = 3;
             body.baseCrit = 0f;
             body.baseArmor *= 1.3f;
+            body.baseMoveSpeed *= .8f;
+            body.levelMaxHealth *= .9f;
             body.levelRegen *= 3;
             body.levelDamage = 1;
             body.levelCrit = 0f;
             body.levelArmor *= 1.3f;
+            body.levelMoveSpeed *= .8f;
             body.portraitIcon = assetBundle.LoadAsset<Texture>("Assets/texChillDrone.png");
             ModelLocator bodyModelLocator = droneBody.GetComponent<ModelLocator>();
             GameObject bodyModelTransformObject = bodyModelLocator.modelTransform.gameObject;
@@ -100,6 +112,8 @@ namespace Chen.ChillDrone.Drone
             master.bodyPrefab = droneBody;
             summonMasterBehavior.masterPrefab = droneMaster;
             PurchaseInteraction purchaseInteraction = brokenObject.GetComponent<PurchaseInteraction>();
+            purchaseInteraction.cost = 80;
+            purchaseInteraction.Networkcost = purchaseInteraction.cost;
             purchaseInteraction.contextToken = "CHILL_DRONE_CONTEXT";
             purchaseInteraction.displayNameToken = "CHILL_DRONE_INTERACTABLE_NAME";
             GenericDisplayNameProvider nameProvider = brokenObject.GetComponent<GenericDisplayNameProvider>();
@@ -159,7 +173,7 @@ namespace Chen.ChillDrone.Drone
 #if DEBUG
             arg1.ConditionalAdd(iDirectorCardHolder, card => iDirectorCardHolder == card);
 #else
-            if (arg2.CheckStage(DirectorAPI.Stage.RallypointDelta))
+            if (arg2.CheckStage(DirectorAPI.Stage.RallypointDelta) || arg2.CheckStage(DirectorAPI.Stage.SirensCall))
             {
                 arg1.ConditionalAdd(iDirectorCardHolder, card => iDirectorCardHolder == card);
             }
