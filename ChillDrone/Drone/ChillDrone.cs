@@ -33,15 +33,6 @@ namespace Chen.ChillDrone.Drone
         private static InteractableSpawnCard interactableSpawnCardBasis { get => Resources.Load<InteractableSpawnCard>("spawncards/interactablespawncard/iscBrokenDrone1"); }
         private static SkillDef skillBasis { get => Resources.Load<SkillDef>("skilldefs/drone1body/Drone1BodyGun"); }
 
-        private static GameObject drone1BrokenModel
-        {
-            get
-            {
-                return Resources.Load<GameObject>("prefabs/networkedobjects/brokendrones/Drone1Broken")
-                                .transform.Find("ModelBase").Find("mdlDrone1").gameObject;
-            }
-        }
-
         protected override GameObject DroneCharacterMasterObject => droneMaster;
 
         protected override void SetupConfig()

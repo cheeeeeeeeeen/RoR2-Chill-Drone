@@ -72,10 +72,6 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Drone\Components\" />
-  </ItemGroup>
-
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="if '$(ConfigurationName)' == 'Debug' (&#xD;&#xA;  mkdir &quot;$(ProjectDir)lib&quot;&#xD;&#xA;  cd &quot;$(ProjectDir)lib&quot;&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\tristanmcpherson-R2API\R2API\R2API.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\tristanmcpherson-R2API\R2API\R2API.xml&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\MMHOOK\MMHOOK_Assembly-CSharp.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensHelpers\ChensHelpers.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensHelpers\ChensHelpers.xml&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensGradiusMod\ChensGradiusMod.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensGradiusMod\ChensGradiusMod.xml&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\ThinkInvis-TILER2\TILER2.dll&quot; . /Y&#xD;&#xA;  copy &quot;E:\Mega\Mod Assets\Risk of Rain 2\Chill Drone Assets\AssetBundles\StandaloneWindows\chilldrone_assets&quot; .. /Y&#xD;&#xA;)" />
   </Target>
