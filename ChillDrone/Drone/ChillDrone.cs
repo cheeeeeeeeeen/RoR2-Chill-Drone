@@ -64,7 +64,7 @@ namespace Chen.ChillDrone.Drone
             }
             AISkillDriver[] newSkillDrivers = flameDroneMaster.DeepCopyComponentsTo<AISkillDriver>(droneMaster).ToArray();
             newSkillDrivers[1].maxDistance = EmitSlow.detectionDistance;
-            newSkillDrivers[2].maxDistance = newSkillDrivers[1].maxDistance + 15f;
+            newSkillDrivers[2].maxDistance = newSkillDrivers[1].maxDistance + (EmitSlow.detectionDistance * .5f);
             newSkillDrivers[3].minDistance = newSkillDrivers[2].maxDistance;
             newSkillDrivers.SetAllDriversToAimTowardsEnemies();
             CharacterMaster master = droneMaster.GetComponent<CharacterMaster>();
@@ -77,13 +77,13 @@ namespace Chen.ChillDrone.Drone
             body.baseDamage = 3;
             body.baseCrit = 0f;
             body.baseArmor *= 1.3f;
-            body.baseMoveSpeed *= .8f;
+            body.baseMoveSpeed *= .7f;
             body.levelMaxHealth *= .9f;
             body.levelRegen *= 3;
             body.levelDamage = 1;
             body.levelCrit = 0f;
             body.levelArmor *= 1.3f;
-            body.levelMoveSpeed *= .8f;
+            body.levelMoveSpeed *= .7f;
             body.portraitIcon = assetBundle.LoadAsset<Texture>("Assets/texChillDrone.png");
             ModelLocator bodyModelLocator = droneBody.GetComponent<ModelLocator>();
             GameObject bodyModelTransformObject = bodyModelLocator.modelTransform.gameObject;

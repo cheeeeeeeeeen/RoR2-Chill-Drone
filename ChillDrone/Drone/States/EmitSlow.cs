@@ -20,9 +20,9 @@ namespace Chen.ChillDrone.Drone.States
         private static float force { get => fireBeamInstance.force; }
         private static GameObject hitEffectPrefab { get => fireBeamInstance.hitEffectPrefab; }
 
-        public static readonly float detectionDistance = 30f;
+        public static readonly float detectionDistance = 20f;
 
-        private static readonly float angularDetection = 45f;
+        private static readonly float angularDetection = 60f;
         private static readonly string muzzleString = "Muzzle";
         private static readonly float maxDistance = detectionDistance * 2f;
         private static readonly float duration = 5f;
