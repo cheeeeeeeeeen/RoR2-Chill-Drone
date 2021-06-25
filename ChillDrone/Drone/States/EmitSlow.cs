@@ -1,10 +1,15 @@
-﻿using EntityStates;
+﻿using Chen.GradiusMod;
+using Chen.GradiusMod.Items.GradiusOption;
+using Chen.GradiusMod.Items.GradiusOption.Components;
+using EntityStates;
 using EntityStates.EngiTurret.EngiTurretWeapon;
 using R2API;
 using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Chen.ChillDrone.Drone.States
 {
@@ -84,9 +89,73 @@ namespace Chen.ChillDrone.Drone.States
             }
         }
 
+        private void InitializeOptionDataStructure()
+        {
+            GradiusOption.instance.FireForAllOptions(characterBody, (option, behavior, _t, _d) =>
+            {
+                if (behavior.O.ContainsKey("laserEffectInstances"))
+                {
+                    List<GameObject> optionLaserInstances;
+                    optionLaserInstances = behavior.O["laserEffectInstances"] as List<GameObject>;
+                    optionLaserInstances.Clear();
+                }
+                else behavior.O["laserEffectInstances"] = new List<GameObject>();
+                if (behavior.O.ContainsKey("laserEffectInstanceEndTransforms"))
+                {
+                    List<Transform> optionLaserEffectInstanceEndTransforms;
+                    optionLaserEffectInstanceEndTransforms = behavior.O["laserEffectInstanceEndTransforms"] as List<Transform>;
+                    optionLaserEffectInstanceEndTransforms.Clear();
+                }
+                else behavior.O["laserEffectInstanceEndTransforms"] = new List<Transform>();
+            });
+        }
+
+        private void OptionsFire(Action<GameObject, OptionBehavior, GameObject, Vector3, List<GameObject>, List<Transform>> action)
+        {
+            GradiusOption.instance.FireForAllOptions(characterBody, (option, behavior, target, direction) =>
+            {
+                if (behavior.O.ContainsKey("laserEffectInstances") && behavior.O.ContainsKey("laserEffectInstanceEndTransforms"))
+                {
+                    List<GameObject> laserInstances = behavior.O["laserEffectInstances"] as List<GameObject>;
+                    List<Transform> laserEndTransforms = behavior.O["laserEffectInstanceEndTransforms"] as List<Transform>;
+                    action(option, behavior, target, direction, laserInstances, laserEndTransforms);
+                }
+            });
+        }
+
+        private void OptionFireBullet(Ray laserRay, GameObject option)
+        {
+            if (effectPrefab) option.MuzzleEffect(effectPrefab, false);
+            if (isAuthority)
+            {
+                BulletAttack bulletAttack = new BulletAttack
+                {
+                    owner = gameObject,
+                    weapon = option,
+                    origin = laserRay.origin,
+                    aimVector = laserRay.direction,
+                    minSpread = minSpread,
+                    maxSpread = maxSpread,
+                    bulletCount = 1U,
+                    damage = damageStat * GradiusOption.instance.damageMultiplier,
+                    procCoefficient = 1f / fireFrequency,
+                    force = force * GradiusOption.instance.damageMultiplier,
+                    muzzleName = muzzleString,
+                    hitEffectPrefab = hitEffectPrefab,
+                    isCrit = Util.CheckRoll(critStat, characterBody.master),
+                    HitEffectNormal = false,
+                    maxDistance = maxDistance,
+                    radius = 0f
+                };
+                bulletAttack.AddModdedDamageType(ChillDrone.chillOnHit);
+                bulletAttack.Fire();
+            }
+        }
+
         public override void OnEnter()
         {
             base.OnEnter();
+            InitializeOptionDataStructure();
             Util.PlaySound(attackSoundString, gameObject);
             modelTransform = GetModelTransform();
             aimRay = GetAimRay();
@@ -101,10 +170,17 @@ namespace Chen.ChillDrone.Drone.States
                     {
                         for (int i = 0; i < results.Count; i++)
                         {
-                            GameObject laserEffect = Object.Instantiate(laserPrefab, muzzleTransform.position, muzzleTransform.rotation);
+                            GameObject laserEffect = UnityObject.Instantiate(laserPrefab, muzzleTransform.position, muzzleTransform.rotation);
                             laserEffect.transform.parent = muzzleTransform;
                             laserEffectInstances.Add(laserEffect);
                             laserEffectInstanceEndTransforms.Add(laserEffect.GetComponent<ChildLocator>().FindChild("LaserEnd"));
+                            OptionsFire((option, _b, _t, _d, laserEffects, laserEndTransforms) =>
+                            {
+                                GameObject optionLaserEffect = UnityObject.Instantiate(laserPrefab, option.transform);
+                                optionLaserEffect.transform.parent = option.transform;
+                                laserEffects.Add(optionLaserEffect);
+                                laserEndTransforms.Add(optionLaserEffect.GetComponent<ChildLocator>().FindChild("LaserEnd"));
+                            });
                         }
                     }
                 }
@@ -139,9 +215,33 @@ namespace Chen.ChillDrone.Drone.States
                         }
                         laserEndTransform.position = point;
                     }
+                    OptionsFire((option, _b, _t, _d, laserEffects, laserEndTransforms) =>
+                    {
+                        Transform optionLaserEndTransform = laserEndTransforms[i];
+                        Vector3 optionStart = option.transform.position;
+                        Vector3 optionEnd = hurtBox.transform.position;
+                        Ray optionRay = new Ray(optionStart, optionEnd - optionStart);
+                        if (fireTimer > num2) OptionFireBullet(optionRay, option);
+                        if (laserEffects[i] && optionLaserEndTransform)
+                        {
+                            Vector3 point = optionRay.GetPoint(maxDistance);
+                            if (Physics.Raycast(optionStart, optionEnd - optionStart, out RaycastHit raycastHit, maxDistance,
+                                                LayerIndex.world.mask | LayerIndex.entityPrecise.mask, QueryTriggerInteraction.UseGlobal))
+                            {
+                                point = raycastHit.point;
+                            }
+                            optionLaserEndTransform.position = point;
+                        }
+                    });
                 }
                 else if (laserInstance)
                 {
+                    OptionsFire((option, _b, _t, _d, laserEffects, laserEndTransforms) =>
+                    {
+                        Destroy(laserEffects[i]);
+                        laserEffects.RemoveAt(i);
+                        laserEndTransforms.RemoveAt(i);
+                    });
                     Destroy(laserInstance);
                     results.RemoveAt(i);
                     laserEffectInstances.RemoveAt(i);
@@ -161,6 +261,15 @@ namespace Chen.ChillDrone.Drone.States
             }
             laserEffectInstances.Clear();
             laserEffectInstanceEndTransforms.Clear();
+            OptionsFire((_o, _b, _t, _d, laserEffects, laserEndTransforms) =>
+            {
+                foreach (var laserEffect in laserEffects)
+                {
+                    if (laserEffect) Destroy(laserEffect);
+                }
+                laserEffects.Clear();
+                laserEndTransforms.Clear();
+            });
             results.Clear();
             base.OnExit();
         }

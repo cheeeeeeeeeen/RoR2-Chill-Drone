@@ -1,8 +1,9 @@
-﻿#undef DEBUG
+﻿#define DEBUG
 
 using Chen.ChillDrone.Drone.States;
 using Chen.GradiusMod;
 using Chen.GradiusMod.Drones;
+using Chen.GradiusMod.Items.GradiusOption;
 using Chen.Helpers.CollectionHelpers;
 using Chen.Helpers.UnityHelpers;
 using EntityStates;
@@ -145,6 +146,8 @@ namespace Chen.ChillDrone.Drone
         protected override void SetupBehavior()
         {
             base.SetupBehavior();
+            GradiusOption.instance.SetToRotateOptions(droneMaster.name);
+            GradiusOption.instance.SetRotateOptionMultiplier(droneMaster.name, 1.2f);
             chillOnHit = ReserveDamageType();
             chillBuff = ScriptableObject.CreateInstance<BuffDef>();
             chillBuff.canStack = false;
