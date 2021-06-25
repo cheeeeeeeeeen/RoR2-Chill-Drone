@@ -1,6 +1,6 @@
 {
   "name": "ChillDrone",
-  "version_number": "1.0.0",
+  "version_number": "1.0.1",
   "website_url": "https://github.com/cheeeeeeeeeen/RoR2-Chill-Drone",
   "description": "A fully functional drone, powered by Chen's Gradius Mod, that slows groups of enemies. Reused assets, but it can be improved. Contact Chen if interested to enhance the drone's visuals.",
   "dependencies": [
