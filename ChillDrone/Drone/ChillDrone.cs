@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿#undef DEBUG
 
 using Chen.ChillDrone.Drone.States;
 using Chen.GradiusMod;
