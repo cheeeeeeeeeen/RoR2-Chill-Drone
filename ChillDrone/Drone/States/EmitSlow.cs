@@ -157,16 +157,15 @@ namespace Chen.ChillDrone.Drone.States
             base.OnEnter();
             InitializeOptionDataStructure();
             Util.PlaySound(attackSoundString, gameObject);
-            modelTransform = GetModelTransform();
             aimRay = GetAimRay();
             InitializeEnemyFinder();
-            if (modelTransform)
+            if (laserPrefab)
             {
-                ChildLocator childLocator = modelTransform.GetComponent<ChildLocator>();
-                if (childLocator)
+                modelTransform = GetModelTransform();
+                if (modelTransform)
                 {
-                    muzzleTransform = childLocator.FindChild(muzzleString);
-                    if (muzzleTransform && laserPrefab)
+                    muzzleTransform = modelTransform.Find(muzzleString);
+                    if (muzzleTransform)
                     {
                         for (int i = 0; i < results.Count; i++)
                         {

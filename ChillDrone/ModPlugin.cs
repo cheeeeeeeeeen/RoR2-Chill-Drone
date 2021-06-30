@@ -5,6 +5,7 @@ using BepInEx.Configuration;
 using Chen.GradiusMod.Drones;
 using Chen.Helpers.GeneralHelpers;
 using Chen.Helpers.LogHelpers;
+using Chen.Helpers.RoR2Helpers;
 using R2API.Utils;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,7 @@ namespace Chen.ChillDrone
 #if DEBUG
             "0." +
 #endif
-            "1.0.1";
+            "2.0.0";
 
         /// <summary>
         /// This mod's name.
@@ -66,7 +67,8 @@ namespace Chen.ChillDrone
 
             Log.Debug("Loading asset bundle...");
             BundleInfo bundleInfo = new BundleInfo("Chen.ChillDrone.chilldrone_assets", BundleType.UnityAssetBundle);
-            assetBundle = new AssetsManager(bundleInfo).Register() as AssetBundle;
+            assetBundle = new AssetsManager(bundleInfo).Register();
+            assetBundle.ConvertShaders();
 
             Log.Debug("Registering Chill Drone...");
             dronesList = DroneCatalog.Initialize(ModGuid, cfgFile);

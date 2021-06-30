@@ -1,10 +1,11 @@
-﻿#undef DEBUG
+﻿#define DEBUG
 
 using Chen.ChillDrone.Drone.States;
 using Chen.GradiusMod;
 using Chen.GradiusMod.Drones;
 using Chen.GradiusMod.Items.GradiusOption;
 using Chen.Helpers.CollectionHelpers;
+using Chen.Helpers.RoR2Helpers;
 using Chen.Helpers.UnityHelpers;
 using EntityStates;
 using R2API;
@@ -54,8 +55,6 @@ namespace Chen.ChillDrone.Drone
             LanguageAPI.Add("CHILL_DRONE_CONTEXT", "Repair Chill Drone");
             LanguageAPI.Add("CHILL_DRONE_INTERACTABLE_NAME", "Broken Chill Drone");
             brokenObject = interactableSpawnCardBasis.prefab.InstantiateClone($"{name}Broken", true);
-            GameObject brokenMeshModel = brokenObject.transform.Find("ModelBase").Find("mdlDrone1").Find("Drone1Mesh").gameObject;
-            brokenMeshModel.GetComponent<MeshRenderer>().material = assetBundle.LoadAsset<Material>("Assets/matRustyIce.mat");
             SummonMasterBehavior summonMasterBehavior = brokenObject.GetComponent<SummonMasterBehavior>();
             droneMaster = summonMasterBehavior.masterPrefab.InstantiateClone($"{name}Master", true);
             contentProvider.masterObjects.Add(droneMaster);
@@ -85,11 +84,14 @@ namespace Chen.ChillDrone.Drone
             body.levelCrit = 0f;
             body.levelArmor *= 1.3f;
             body.levelMoveSpeed *= .7f;
-            body.portraitIcon = assetBundle.LoadAsset<Texture>("Assets/texChillDrone.png");
-            ModelLocator bodyModelLocator = droneBody.GetComponent<ModelLocator>();
-            GameObject bodyModelTransformObject = bodyModelLocator.modelTransform.gameObject;
-            CharacterModel bodyModel = bodyModelTransformObject.GetComponent<CharacterModel>();
-            bodyModel.baseRendererInfos[0].defaultMaterial = assetBundle.LoadAsset<Material>("Assets/matChillDrone.mat");
+            body.portraitIcon = assetBundle.LoadAsset<Texture>("Assets/GEMO/texChillDrone.png");
+            GameObject customModel = assetBundle.LoadAsset<GameObject>("Assets/GEMO/mdlChillDrone.prefab");
+            Quaternion originalRotation = customModel.transform.localRotation;
+            droneBody.ReplaceModel(customModel);
+            customModel.transform.localRotation = originalRotation;
+            customModel.InitializeDroneModelComponents(body);
+            customModel.transform.Find("PropellerLEffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, 900f);
+            customModel.transform.Find("PropellerREffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, -900f);
             SkillLocator locator = droneBody.GetComponent<SkillLocator>();
             LoadoutAPI.AddSkill(typeof(EmitSlow));
             SkillDef newSkillDef = UnityObject.Instantiate(skillBasis);
@@ -119,6 +121,26 @@ namespace Chen.ChillDrone.Drone
             purchaseInteraction.displayNameToken = "CHILL_DRONE_INTERACTABLE_NAME";
             GenericDisplayNameProvider nameProvider = brokenObject.GetComponent<GenericDisplayNameProvider>();
             nameProvider.displayToken = "CHILL_DRONE_NAME";
+            GameObject customBrokenModel = assetBundle.LoadAsset<GameObject>("Assets/GEMO/mdlChillDroneBroken.prefab");
+            brokenObject.ReplaceModel(customBrokenModel);
+            Highlight highlight = brokenObject.GetComponent<Highlight>();
+            highlight.targetRenderer = customBrokenModel.GetComponentInChildren<MeshRenderer>();
+            EntityLocator entityLocator = customBrokenModel.AddComponent<EntityLocator>();
+            entityLocator.entity = brokenObject;
+            GameObject coreObject = customBrokenModel.transform.GetChild(0).gameObject;
+            EntityLocator coreEntityLocator = coreObject.AddComponent<EntityLocator>();
+            coreEntityLocator.entity = brokenObject;
+            GameObject brokenEffects = brokenObject.transform.Find("ModelBase").Find("BrokenDroneVFX").gameObject;
+            brokenEffects.transform.parent = customBrokenModel.transform;
+            GameObject sparks = brokenEffects.transform.Find("Small Sparks, Mesh").gameObject;
+            ParticleSystem.ShapeModule sparksShape = sparks.GetComponent<ParticleSystem>().shape;
+            sparksShape.shapeType = ParticleSystemShapeType.MeshRenderer;
+            sparksShape.meshShapeType = ParticleSystemMeshShapeType.Edge;
+            sparksShape.meshRenderer = (MeshRenderer)highlight.targetRenderer;
+            GameObject damagePoint = brokenEffects.transform.Find("Damage Point").gameObject;
+            damagePoint.transform.localPosition = Vector3.zero;
+            damagePoint.transform.localRotation = Quaternion.identity;
+            damagePoint.transform.localScale = Vector3.one;
             iSpawnCard = UnityObject.Instantiate(interactableSpawnCardBasis);
             iSpawnCard.name = $"iscBroken{name}";
             iSpawnCard.prefab = brokenObject;
@@ -168,7 +190,11 @@ namespace Chen.ChillDrone.Drone
 
         private void ChillDrone_GetStatCoefficients(CharacterBody sender, StatHookEventArgs args)
         {
-            if (sender.HasBuff(chillBuff)) args.moveSpeedMultAdd -= .7f;
+            if (sender.HasBuff(chillBuff))
+            {
+                args.moveSpeedMultAdd -= .7f;
+                args.jumpPowerMultAdd -= .7f;
+            }
         }
 
         private void DirectorAPI_InteractableActions(List<DirectorCardHolder> arg1, StageInfo arg2)
