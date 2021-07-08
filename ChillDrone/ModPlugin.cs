@@ -5,7 +5,6 @@ using BepInEx.Configuration;
 using Chen.GradiusMod.Drones;
 using Chen.Helpers.GeneralHelpers;
 using Chen.Helpers.LogHelpers;
-using Chen.Helpers.RoR2Helpers;
 using R2API.Utils;
 using System.Collections.Generic;
 using System.IO;

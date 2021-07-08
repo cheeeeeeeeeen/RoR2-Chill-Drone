@@ -1,4 +1,5 @@
 ﻿using Chen.GradiusMod;
+using Chen.GradiusMod.Compatibility;
 using Chen.GradiusMod.Items.GradiusOption;
 using Chen.GradiusMod.Items.GradiusOption.Components;
 using EntityStates;
@@ -41,6 +42,14 @@ namespace Chen.ChillDrone.Drone.States
         private readonly List<GameObject> laserEffectInstances = new List<GameObject>();
         private readonly List<Transform> laserEffectInstanceEndTransforms = new List<Transform>();
         private Transform muzzleTransform;
+
+        private void ArmsRaceTrigger(float damage)
+        {
+            if (ChensClassicItems.enabled)
+            {
+                ChensClassicItems.TriggerArtillery(characterBody, damage, characterBody.RollCrit());
+            }
+        }
 
         private void InitializeEnemyFinder()
         {
@@ -86,6 +95,7 @@ namespace Chen.ChillDrone.Drone.States
                 };
                 bulletAttack.AddModdedDamageType(ChillDrone.chillOnHit);
                 bulletAttack.Fire();
+                ArmsRaceTrigger(damageStat);
             }
         }
 
@@ -128,6 +138,7 @@ namespace Chen.ChillDrone.Drone.States
             if (effectPrefab) option.MuzzleEffect(effectPrefab, false);
             if (isAuthority)
             {
+                float computedDamage = damageStat * GradiusOption.instance.damageMultiplier;
                 BulletAttack bulletAttack = new BulletAttack
                 {
                     owner = gameObject,
@@ -137,7 +148,7 @@ namespace Chen.ChillDrone.Drone.States
                     minSpread = minSpread,
                     maxSpread = maxSpread,
                     bulletCount = 1U,
-                    damage = damageStat * GradiusOption.instance.damageMultiplier,
+                    damage = computedDamage,
                     procCoefficient = 1f / fireFrequency,
                     force = force * GradiusOption.instance.damageMultiplier,
                     muzzleName = muzzleString,
@@ -149,6 +160,7 @@ namespace Chen.ChillDrone.Drone.States
                 };
                 bulletAttack.AddModdedDamageType(ChillDrone.chillOnHit);
                 bulletAttack.Fire();
+                ArmsRaceTrigger(computedDamage);
             }
         }
 

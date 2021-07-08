@@ -5,7 +5,7 @@ using Chen.GradiusMod;
 using Chen.GradiusMod.Drones;
 using Chen.GradiusMod.Items.GradiusOption;
 using Chen.Helpers.CollectionHelpers;
-using Chen.Helpers.RoR2Helpers;
+using Chen.Helpers.GeneralHelpers;
 using Chen.Helpers.UnityHelpers;
 using EntityStates;
 using R2API;
@@ -89,7 +89,7 @@ namespace Chen.ChillDrone.Drone
             Quaternion originalRotation = customModel.transform.localRotation;
             droneBody.ReplaceModel(customModel);
             customModel.transform.localRotation = originalRotation;
-            customModel.InitializeDroneModelComponents(body);
+            customModel.InitializeDroneModelComponents(body, 1.3f);
             customModel.transform.Find("PropellerLEffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, 900f);
             customModel.transform.Find("PropellerREffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, -900f);
             SkillLocator locator = droneBody.GetComponent<SkillLocator>();

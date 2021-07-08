@@ -36,6 +36,9 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 
 ## More Information
 
+**Jestar#5233** made the concept art for the Chill Drone.
+- Contact: Through Discord.
+
 **GEMO#7470** made the 3D model for the Chill Drone, and later used for the icon.
 - Contact: Through Discord.
 
