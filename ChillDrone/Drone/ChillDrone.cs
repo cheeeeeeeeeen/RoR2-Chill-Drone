@@ -13,6 +13,7 @@ using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Skills;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static Chen.ChillDrone.ModPlugin;
@@ -36,9 +37,13 @@ namespace Chen.ChillDrone.Drone
         private GameObject droneBody { get; set; }
         private GameObject droneMaster { get; set; }
 
-        private static InteractableSpawnCard interactableSpawnCardBasis { get => Resources.Load<InteractableSpawnCard>("spawncards/interactablespawncard/iscBrokenDrone1"); }
-        private static SkillDef skillBasis { get => Resources.Load<SkillDef>("skilldefs/drone1body/Drone1BodyGun"); }
-        private static GameObject flameDroneMaster { get => Resources.Load<GameObject>("prefabs/charactermasters/FlameDroneMaster"); }
+        private static readonly Lazy<InteractableSpawnCard> _iscBasis = new Lazy<InteractableSpawnCard>(() => Resources.Load<InteractableSpawnCard>("spawncards/interactablespawncard/iscBrokenDrone1"));
+        private static readonly Lazy<SkillDef> _skillBasis = new Lazy<SkillDef>(() => Resources.Load<SkillDef>("skilldefs/drone1body/Drone1BodyGun"));
+        private static readonly Lazy<GameObject> _flameDroneMaster = new Lazy<GameObject>(() => Resources.Load<GameObject>("prefabs/charactermasters/FlameDroneMaster"));
+
+        private static InteractableSpawnCard interactableSpawnCardBasis { get => _iscBasis.Value; }
+        private static SkillDef skillBasis { get => _skillBasis.Value; }
+        private static GameObject flameDroneMaster { get => _flameDroneMaster.Value; }
 
         protected override GameObject DroneCharacterMasterObject => droneMaster;
 
