@@ -98,14 +98,14 @@ namespace Chen.ChillDrone.Drone
             customModel.transform.Find("PropellerLEffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, 900f);
             customModel.transform.Find("PropellerREffect").gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0f, 0f, -900f);
             SkillLocator locator = droneBody.GetComponent<SkillLocator>();
-            LoadoutAPI.AddSkill(typeof(EmitSlow));
+            ContentAddition.AddEntityState<EmitSlow>(out _);
             SkillDef newSkillDef = UnityObject.Instantiate(skillBasis);
             newSkillDef.activationState = new SerializableEntityStateType(typeof(EmitSlow));
             newSkillDef.baseRechargeInterval = 4;
             newSkillDef.beginSkillCooldownOnSkillEnd = true;
             newSkillDef.baseMaxStock = 1;
             newSkillDef.fullRestockOnAssign = false;
-            LoadoutAPI.AddSkillDef(newSkillDef);
+            ContentAddition.AddSkillDef(newSkillDef);
             SkillFamily skillFamily = UnityObject.Instantiate(locator.primary.skillFamily);
             skillFamily.variants = new SkillFamily.Variant[1];
             skillFamily.variants[0] = new SkillFamily.Variant
@@ -114,7 +114,7 @@ namespace Chen.ChillDrone.Drone
                 viewableNode = new ViewablesCatalog.Node("", false, null)
             };
             locator.primary.SetFieldValue("_skillFamily", skillFamily);
-            LoadoutAPI.AddSkillFamily(skillFamily);
+            ContentAddition.AddSkillFamily(skillFamily);
             CharacterDeathBehavior death = body.GetOrAddComponent<CharacterDeathBehavior>();
             death.deathState = new SerializableEntityStateType(typeof(DeathState));
             master.bodyPrefab = droneBody;
@@ -159,7 +159,6 @@ namespace Chen.ChillDrone.Drone
 #endif
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Close,
-                allowAmbushSpawn = true,
                 preventOverhead = false
             };
             iDirectorCardHolder = new DirectorCardHolder
@@ -181,7 +180,7 @@ namespace Chen.ChillDrone.Drone
             chillBuff.isDebuff = true;
             chillBuff.name = "Chill Drone - Chilled";
             chillBuff.iconSprite = assetBundle.LoadAsset<Sprite>("Assets/texBuffChill.png");
-            BuffAPI.Add(new CustomBuff(chillBuff));
+            ContentAddition.AddBuffDef(chillBuff);
             InteractableActions += DirectorAPI_InteractableActions;
             GetStatCoefficients += ChillDrone_GetStatCoefficients;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
