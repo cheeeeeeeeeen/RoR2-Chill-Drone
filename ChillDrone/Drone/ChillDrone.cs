@@ -164,7 +164,7 @@ namespace Chen.ChillDrone.Drone
             iDirectorCardHolder = new DirectorCardHolder
             {
                 Card = directorCard,
-                MonsterCategory = MonsterCategory.None,
+                MonsterCategory = MonsterCategory.Invalid,
                 InteractableCategory = InteractableCategory.Drones,
             };
         }
@@ -201,7 +201,7 @@ namespace Chen.ChillDrone.Drone
             }
         }
 
-        private void DirectorAPI_InteractableActions(List<DirectorCardHolder> arg1, StageInfo arg2)
+        private void DirectorAPI_InteractableActions(DccsPool arg0, List<DirectorCardHolder> arg1, StageInfo arg2)
         {
 #if DEBUG
             arg1.ConditionalAdd(iDirectorCardHolder, card => iDirectorCardHolder == card);
