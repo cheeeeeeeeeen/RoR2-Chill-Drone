@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Version-2.1.0-orange)
+![Version](https://img.shields.io/badge/Version-2.1.1-orange)
 [![GitHub issues](https://img.shields.io/github/issues/cheeeeeeeeeen/RoR2-Chill-Drone)](https://github.com/cheeeeeeeeeen/RoR2-Chill-Drone/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/cheeeeeeeeeen/RoR2-Chill-Drone)](https://github.com/cheeeeeeeeeen/RoR2-Chill-Drone/pulls)
 [![Support Chen](https://img.shields.io/badge/Support-Chen-ff69b4)](https://ko-fi.com/cheeeeeeeeeen)
@@ -47,7 +47,7 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 
 ## Changelog
 
-**2.1.0**
+**2.1.1**
 - Remove deprecations and update code to a working state.
 - Remove tests to reduce complexity for newer maintainers.
 
