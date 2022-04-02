@@ -48,6 +48,10 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 ## Changelog
 
 **2.1.1**
+- Update nuget references.
+- Apply changes from R2API's DirectorAPI.
+
+**2.1.0**
 - Remove deprecations and update code to a working state.
 - Remove tests to reduce complexity for newer maintainers.
 
