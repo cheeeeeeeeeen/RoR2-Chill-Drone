@@ -34,7 +34,7 @@ namespace Chen.ChillDrone
 #if DEBUG
             "0." +
 #endif
-            "2.1.0";
+            "2.1.1";
 
         /// <summary>
         /// This mod's name.
