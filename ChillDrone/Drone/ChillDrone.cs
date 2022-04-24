@@ -19,6 +19,7 @@ using UnityEngine;
 using static Chen.ChillDrone.ModPlugin;
 using static R2API.DamageAPI;
 using static R2API.DirectorAPI;
+using static R2API.DirectorAPI.Helpers;
 using static R2API.RecalculateStatsAPI;
 using UnityObject = UnityEngine.Object;
 
@@ -155,7 +156,7 @@ namespace Chen.ChillDrone.Drone
 #if DEBUG
                 selectionWeight = 1000,
 #else
-                selectionWeight = 1,
+                selectionWeight = 2,
 #endif
                 minimumStageCompletions = 0,
                 spawnDistance = DirectorCore.MonsterSpawnDistance.Close,
@@ -201,14 +202,14 @@ namespace Chen.ChillDrone.Drone
             }
         }
 
-        private void DirectorAPI_InteractableActions(DccsPool arg0, List<DirectorCardHolder> arg1, StageInfo arg2)
+        private void DirectorAPI_InteractableActions(DccsPool arg0, StageInfo arg1)
         {
 #if DEBUG
-            arg1.ConditionalAdd(iDirectorCardHolder, card => iDirectorCardHolder == card);
+            ForEachPoolEntryInDccsPool(arg0, (poolEntry) => poolEntry.dccs.AddCard(iDirectorCardHolder));
 #else
-            if (arg2.CheckStage(DirectorAPI.Stage.RallypointDelta) || arg2.CheckStage(DirectorAPI.Stage.SirensCall))
+            if (arg1.CheckStage(DirectorAPI.Stage.RallypointDelta) || arg1.CheckStage(DirectorAPI.Stage.SirensCall))
             {
-                arg1.ConditionalAdd(iDirectorCardHolder, card => iDirectorCardHolder == card);
+                ForEachPoolEntryInDccsPool(arg0, (poolEntry) => poolEntry.dccs.AddCard(iDirectorCardHolder));
             }
 #endif
         }
