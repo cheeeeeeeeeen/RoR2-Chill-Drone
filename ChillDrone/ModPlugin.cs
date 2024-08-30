@@ -34,7 +34,7 @@ namespace Chen.ChillDrone
 #if DEBUG
             "0." +
 #endif
-            "2.1.2";
+            "2.1.3";
 
         /// <summary>
         /// This mod's name.
@@ -43,6 +43,7 @@ namespace Chen.ChillDrone
 
         /// <summary>
         /// This mod's GUID.
+        /// thank you chen for your amazing mods and all you've done for the RoR2 Modding Community - Phreel
         /// </summary>
         public const string ModGuid = "com.Chen.ChillDrone";
 
