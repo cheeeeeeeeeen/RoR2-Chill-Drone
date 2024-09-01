@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Version>2.1.2</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
@@ -38,10 +38,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BepInEx.Core" Version="5.4.19" />
-    <PackageReference Include="R2API" Version="4.3.5" />
-    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.2.2-r.0" />
-    <PackageReference Include="UnityEngine.Modules" Version="2019.4.26" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+    <PackageReference Include="R2API.Language" Version="1.0.*" />
+    <PackageReference Include="R2API.Director" Version="2.1.3" />
+    <PackageReference Include="R2API.Prefab" Version="1.0.*" />
+    <PackageReference Include="R2API.Sound" Version="1.0.*" />
+    <PackageReference Include="R2API.Networking" Version="1.0.*" />
+    <PackageReference Include="R2API.DamageType" Version="1.1.*" />
+    <PackageReference Include="R2API.RecalculateStats" Version="1.4.*" />
+    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.1.275-r.0" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
+    <PackageReference Include="MMHOOK.RoR2" Version="2024.8.28" />
+    <PackageReference Include="RoR2BepInExPack" Version="1.7.0">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -51,19 +61,8 @@
     <Reference Include="ChensHelpers">
       <HintPath>lib\ChensHelpers.dll</HintPath>
     </Reference>
-    <Reference Include="MMHOOK_RoR2">
-      <HintPath>lib\MMHOOK_RoR2.dll</HintPath>
-    </Reference>
     <Reference Include="TILER2">
       <HintPath>lib\TILER2.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if '$(ConfigurationName)' == 'Debug' (&#xD;&#xA;  mkdir &quot;$(ProjectDir)lib&quot;&#xD;&#xA;  cd &quot;$(ProjectDir)lib&quot;&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\MMHOOK\MMHOOK_RoR2.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensHelpers\ChensHelpers.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensHelpers\ChensHelpers.xml&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensGradiusMod\ChensGradiusMod.dll&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChensGradiusMod\ChensGradiusMod.xml&quot; . /Y&#xD;&#xA;  copy &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\ThinkInvis-TILER2\TILER2.dll&quot; . /Y&#xD;&#xA;  copy &quot;E:\Mega\Mod Assets\Risk of Rain 2\Chill Drone Assets\AssetBundles\StandaloneWindows\chilldrone_assets&quot; .. /Y&#xD;&#xA;)" />
-  </Target>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(ProjectDir)Build&quot;&#xD;&#xA;cd &quot;$(ProjectDir)Build&quot;&#xD;&#xA;del * /Q&#xD;&#xA;xcopy &quot;$(TargetPath)&quot; /Y&#xD;&#xA;if '$(ConfigurationName)' == 'Debug' (&#xD;&#xA;  copy &quot;$(ProjectDir)ModMeta&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)README.md&quot; . /Y&#xD;&#xA;  copy &quot;$(SolutionDir)LICENSE.txt&quot; . /Y&#xD;&#xA;  7z a Build.zip .\* -x!Build.zip -x!old_*&#xD;&#xA;  mkdir &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot;&#xD;&#xA;  copy &quot;$(TargetName).xml&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;  copy &quot;$(TargetFileName)&quot; &quot;C:\Users\Chen\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Default\BepInEx\plugins\Chen-ChillDrone&quot; /Y&#xD;&#xA;)" />
-  </Target>
 </Project>

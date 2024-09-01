@@ -43,13 +43,13 @@ namespace Chen.ChillDrone.Drone.States
         private readonly List<Transform> laserEffectInstanceEndTransforms = new List<Transform>();
         private Transform muzzleTransform;
 
-        private void ArmsRaceTrigger(float damage)
+        /*private void ArmsRaceTrigger(float damage)
         {
             if (ChensClassicItems.enabled)
             {
                 ChensClassicItems.TriggerArtillery(characterBody, damage, characterBody.RollCrit());
             }
-        }
+        }*/
 
         private void InitializeEnemyFinder()
         {
@@ -95,7 +95,7 @@ namespace Chen.ChillDrone.Drone.States
                 };
                 bulletAttack.AddModdedDamageType(ChillDrone.chillOnHit);
                 bulletAttack.Fire();
-                ArmsRaceTrigger(damageStat);
+                //ArmsRaceTrigger(damageStat);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Chen.ChillDrone.Drone.States
                 };
                 bulletAttack.AddModdedDamageType(ChillDrone.chillOnHit);
                 bulletAttack.Fire();
-                ArmsRaceTrigger(computedDamage);
+                //ArmsRaceTrigger(computedDamage);
             }
         }
 
