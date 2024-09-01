@@ -33,6 +33,9 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 
 ## More Information
 
+**Phreelosu** continued to maintain the mod in working order for the latest updates (as of September 1, 2024).
+- Contact: [GitHub Account](https://github.com/Phreelosu)
+
 **Jestar#5233** made the concept art for the Chill Drone.
 - Contact: Through Discord.
 
