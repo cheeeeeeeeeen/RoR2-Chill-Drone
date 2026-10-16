@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>2.1.2</Version>
+    <Version>2.1.4</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RootNamespace>Chen.ChillDrone</RootNamespace>
@@ -34,22 +34,23 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.0.*">
+    <PackageReference Include="BepInEx.Analyzers" Version="*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="R2API.Language" Version="1.0.*" />
-    <PackageReference Include="R2API.Director" Version="2.1.3" />
-    <PackageReference Include="R2API.Prefab" Version="1.0.*" />
-    <PackageReference Include="R2API.Sound" Version="1.0.*" />
-    <PackageReference Include="R2API.Networking" Version="1.0.*" />
-    <PackageReference Include="R2API.DamageType" Version="1.1.*" />
-    <PackageReference Include="R2API.RecalculateStats" Version="1.4.*" />
-    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.1.275-r.0" />
-    <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
-    <PackageReference Include="MMHOOK.RoR2" Version="2024.8.28" />
-    <PackageReference Include="RoR2BepInExPack" Version="1.7.0">
+    <PackageReference Include="R2API.ContentManagement" Version="*" />
+    <PackageReference Include="R2API.Language" Version="*" />
+    <PackageReference Include="R2API.Director" Version="*" />
+    <PackageReference Include="R2API.Prefab" Version="*" />
+    <PackageReference Include="R2API.Sound" Version="*" />
+    <PackageReference Include="R2API.Networking" Version="*" />
+    <PackageReference Include="R2API.DamageType" Version="*" />
+    <PackageReference Include="R2API.RecalculateStats" Version="*" />
+    <PackageReference Include="RiskOfRain2.GameLibs" Version="*-*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.45" />
+    <PackageReference Include="MMHOOK.RoR2" Version="*" />
+    <PackageReference Include="RoR2BepInExPack" Version="*">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
   </ItemGroup>
@@ -61,8 +62,8 @@
     <Reference Include="ChensHelpers">
       <HintPath>lib\ChensHelpers.dll</HintPath>
     </Reference>
-    <Reference Include="TILER2">
-      <HintPath>lib\TILER2.dll</HintPath>
+    <Reference Include="HGCSharpUtils">
+      <HintPath>lib\HGCSharpUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Version-2.1.2-orange)
+![Version](https://img.shields.io/badge/Version-2.1.4-orange)
 [![GitHub issues](https://img.shields.io/github/issues/cheeeeeeeeeen/RoR2-Chill-Drone)](https://github.com/cheeeeeeeeeen/RoR2-Chill-Drone/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/cheeeeeeeeeen/RoR2-Chill-Drone)](https://github.com/cheeeeeeeeeen/RoR2-Chill-Drone/pulls)
 [![Support Chen](https://img.shields.io/badge/Support-Chen-ff69b4)](https://ko-fi.com/cheeeeeeeeeen)
@@ -33,6 +33,9 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 
 ## More Information
 
+**Phreelosu** continued to maintain the mod in working order for the latest updates (as of September 1, 2024).
+- Contact: [GitHub Account](https://github.com/Phreelosu)
+
 **Jestar#5233** made the concept art for the Chill Drone.
 - Contact: Through Discord.
 
@@ -46,6 +49,11 @@ If one does not want to use a mod manager, then get the DLL from **[Thunderstore
 - Contact: Through Discord.
 
 ## Changelog
+
+**2.2.0**
+- Update to the latest game version and to Chen's Gradius Mod without TILER2.
+- The Chill Drone is now registered as a drone like the vanilla ones, so it can be picked up, scrapped, combined and upgraded.
+- Fix the beams not firing or showing up.
 
 **2.1.2**
 - Recompile so that the mod works again.
