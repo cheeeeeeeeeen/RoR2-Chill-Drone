@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChillDrone</name>
+    </assembly>
+    <members>
+        <member name="T:Chen.ChillDrone.ModPlugin">
+            <summary>
+            Unity Plugin to set the Chill Drone up.
+            </summary>
+        </member>
+        <member name="F:Chen.ChillDrone.ModPlugin.ModVer">
+            <summary>
+            This mod's version.
+            </summary>
+        </member>
+        <member name="F:Chen.ChillDrone.ModPlugin.ModName">
+            <summary>
+            This mod's name.
+            </summary>
+        </member>
+        <member name="F:Chen.ChillDrone.ModPlugin.ModGuid">
+            <summary>
+            This mod's GUID.
+            thank you chen for your amazing mods and all you've done for the RoR2 Modding Community - Phreel
+            </summary>
+        </member>
+    </members>
+</doc>

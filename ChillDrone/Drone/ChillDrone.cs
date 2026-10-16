@@ -14,8 +14,8 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Skills;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using static Chen.ChillDrone.ModPlugin;
 using static R2API.DamageAPI;
 using static R2API.DirectorAPI;
@@ -38,9 +38,9 @@ namespace Chen.ChillDrone.Drone
         private GameObject droneBody { get; set; }
         private GameObject droneMaster { get; set; }
 
-        private static readonly Lazy<InteractableSpawnCard> _iscBasis = new Lazy<InteractableSpawnCard>(() => Resources.Load<InteractableSpawnCard>("spawncards/interactablespawncard/iscBrokenDrone1"));
-        private static readonly Lazy<SkillDef> _skillBasis = new Lazy<SkillDef>(() => Resources.Load<SkillDef>("skilldefs/drone1body/Drone1BodyGun"));
-        private static readonly Lazy<GameObject> _flameDroneMaster = new Lazy<GameObject>(() => Resources.Load<GameObject>("prefabs/charactermasters/FlameDroneMaster"));
+        private static readonly Lazy<InteractableSpawnCard> _iscBasis = LazyAddressable<InteractableSpawnCard>("RoR2/Base/Drones/iscBrokenDrone1.asset");
+        private static readonly Lazy<SkillDef> _skillBasis = LazyAddressable<SkillDef>("RoR2/Base/Drones/Drone1BodyGun.asset");
+        private static readonly Lazy<GameObject> _flameDroneMaster = LazyAddressable<GameObject>("RoR2/Base/Drones/FlameDroneMaster.prefab");
 
         private static InteractableSpawnCard interactableSpawnCardBasis { get => _iscBasis.Value; }
         private static SkillDef skillBasis { get => _skillBasis.Value; }
@@ -60,22 +60,33 @@ namespace Chen.ChillDrone.Drone
             LanguageAPI.Add("CHILL_DRONE_NAME", "Chill Drone");
             LanguageAPI.Add("CHILL_DRONE_CONTEXT", "Repair Chill Drone");
             LanguageAPI.Add("CHILL_DRONE_INTERACTABLE_NAME", "Broken Chill Drone");
+            LanguageAPI.Add("CHILL_DRONE_PICKUP", "Slows nearby enemies with chilling beams.");
+            LanguageAPI.Add("CHILL_DRONE_DESCRIPTION",
+                $"Fires beams at every enemy within <style=cIsUtility>{EmitSlow.detectionDistance}m</style> in front of it, " +
+                "<style=cIsUtility>slowing</style> them by <style=cIsUtility>70%</style> while they are hit.");
+            LanguageAPI.Add("CHILL_DRONE_SKILL_DESCRIPTION",
+                $"Chilling Beams: Beam every nearby enemy for up to {EmitSlow.duration} seconds, <style=cIsUtility>slowing</style> them.");
+            GameObject pickupDisplay = CreatePickupDisplay(assetBundle.LoadAsset<GameObject>("Assets/GEMO/mdlChillDrone.prefab"));
             brokenObject = interactableSpawnCardBasis.prefab.InstantiateClone($"{name}Broken", true);
             SummonMasterBehavior summonMasterBehavior = brokenObject.GetComponent<SummonMasterBehavior>();
             droneMaster = summonMasterBehavior.masterPrefab.InstantiateClone($"{name}Master", true);
-            contentProvider.masterObjects.Add(droneMaster);
+            ContentAddition.AddMaster(droneMaster);
             foreach (var skillDriver in droneMaster.GetComponents<AISkillDriver>())
             {
-                UnityObject.Destroy(skillDriver);
+                UnityObject.DestroyImmediate(skillDriver);
             }
             AISkillDriver[] newSkillDrivers = flameDroneMaster.DeepCopyComponentsTo<AISkillDriver>(droneMaster).ToArray();
-            newSkillDrivers[1].maxDistance = EmitSlow.detectionDistance;
-            newSkillDrivers[2].maxDistance = newSkillDrivers[1].maxDistance + (EmitSlow.detectionDistance * .5f);
-            newSkillDrivers[3].minDistance = newSkillDrivers[2].maxDistance;
+            if (newSkillDrivers.Length > 3)
+            {
+                newSkillDrivers[1].maxDistance = EmitSlow.detectionDistance;
+                newSkillDrivers[2].maxDistance = newSkillDrivers[1].maxDistance + (EmitSlow.detectionDistance * .5f);
+                newSkillDrivers[3].minDistance = newSkillDrivers[2].maxDistance;
+            }
+            else Log.Warning($"{name}: The Incinerator Drone skill drivers changed. Attack ranges are left at their default values.");
             newSkillDrivers.SetAllDriversToAimTowardsEnemies();
             CharacterMaster master = droneMaster.GetComponent<CharacterMaster>();
             droneBody = master.bodyPrefab.InstantiateClone($"{name}Body", true);
-            contentProvider.bodyObjects.Add(droneBody);
+            ContentAddition.AddBody(droneBody);
             CharacterBody body = droneBody.GetComponent<CharacterBody>();
             body.baseNameToken = "CHILL_DRONE_NAME";
             body.baseMaxHealth *= .9f;
@@ -112,6 +123,7 @@ namespace Chen.ChillDrone.Drone
             skillFamily.variants[0] = new SkillFamily.Variant
             {
                 skillDef = newSkillDef,
+                unlockableDef = null,
                 viewableNode = new ViewablesCatalog.Node("", false, null)
             };
             locator.primary.SetFieldValue("_skillFamily", skillFamily);
@@ -128,25 +140,15 @@ namespace Chen.ChillDrone.Drone
             GenericDisplayNameProvider nameProvider = brokenObject.GetComponent<GenericDisplayNameProvider>();
             nameProvider.displayToken = "CHILL_DRONE_NAME";
             GameObject customBrokenModel = assetBundle.LoadAsset<GameObject>("Assets/GEMO/mdlChillDroneBroken.prefab");
-            brokenObject.ReplaceModel(customBrokenModel);
-            Highlight highlight = brokenObject.GetComponent<Highlight>();
-            highlight.targetRenderer = customBrokenModel.GetComponentInChildren<MeshRenderer>();
-            EntityLocator entityLocator = customBrokenModel.AddComponent<EntityLocator>();
-            entityLocator.entity = brokenObject;
-            GameObject coreObject = customBrokenModel.transform.GetChild(0).gameObject;
-            EntityLocator coreEntityLocator = coreObject.AddComponent<EntityLocator>();
-            coreEntityLocator.entity = brokenObject;
-            GameObject brokenEffects = brokenObject.transform.Find("ModelBase").Find("BrokenDroneVFX").gameObject;
-            brokenEffects.transform.parent = customBrokenModel.transform;
-            GameObject sparks = brokenEffects.transform.Find("Small Sparks, Mesh").gameObject;
-            ParticleSystem.ShapeModule sparksShape = sparks.GetComponent<ParticleSystem>().shape;
-            sparksShape.shapeType = ParticleSystemShapeType.MeshRenderer;
-            sparksShape.meshShapeType = ParticleSystemMeshShapeType.Edge;
-            sparksShape.meshRenderer = (MeshRenderer)highlight.targetRenderer;
-            GameObject damagePoint = brokenEffects.transform.Find("Damage Point").gameObject;
-            damagePoint.transform.localPosition = Vector3.zero;
-            damagePoint.transform.localRotation = Quaternion.identity;
-            damagePoint.transform.localScale = Vector3.one;
+            MeshRenderer highlightRenderer = customBrokenModel.GetComponentInChildren<MeshRenderer>();
+            ReplaceBrokenModel(brokenObject, customBrokenModel, highlightRenderer, customBrokenModel.transform.GetChild(0).gameObject);
+            Transform damagePoint = FindBrokenDamagePoint(customBrokenModel);
+            if (damagePoint)
+            {
+                damagePoint.localPosition = Vector3.zero;
+                damagePoint.localRotation = Quaternion.identity;
+                damagePoint.localScale = Vector3.one;
+            }
             iSpawnCard = UnityObject.Instantiate(interactableSpawnCardBasis);
             iSpawnCard.name = $"iscBroken{name}";
             iSpawnCard.prefab = brokenObject;
@@ -168,6 +170,8 @@ namespace Chen.ChillDrone.Drone
                 MonsterCategory = MonsterCategory.Invalid,
                 InteractableCategory = InteractableCategory.Drones,
             };
+            droneDef = CreateDroneDef(LoadVanillaDroneDef("RoR2/Base/Drones/MissileDrone.asset"), droneBody, brokenObject, iSpawnCard, "CHILL_DRONE",
+                                      body.portraitIcon, pickupDisplay, LoadVanillaDroneDef("RoR2/Base/Drones/Drone1.asset"));
         }
 
         protected override void SetupBehavior()
@@ -190,7 +194,7 @@ namespace Chen.ChillDrone.Drone
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             orig(self, damageInfo);
-            if (damageInfo.HasModdedDamageType(chillOnHit)) self.body.AddTimedBuff(chillBuff, 1f);
+            if (self.body && damageInfo.HasModdedDamageType(chillOnHit)) self.body.AddTimedBuff(chillBuff, 1f);
         }
 
         private void ChillDrone_GetStatCoefficients(CharacterBody sender, StatHookEventArgs args)
@@ -204,6 +208,7 @@ namespace Chen.ChillDrone.Drone
 
         private void DirectorAPI_InteractableActions(DccsPool arg0, StageInfo arg1)
         {
+            if (!arg0) return;
 #if DEBUG
             ForEachPoolEntryInDccsPool(arg0, (poolEntry) => poolEntry.dccs.AddCard(iDirectorCardHolder));
 #else
@@ -212,6 +217,16 @@ namespace Chen.ChillDrone.Drone
                 ForEachPoolEntryInDccsPool(arg0, (poolEntry) => poolEntry.dccs.AddCard(iDirectorCardHolder));
             }
 #endif
+        }
+
+        private static Lazy<T> LazyAddressable<T>(string key)
+        {
+            return new Lazy<T>(() =>
+            {
+                T asset = Addressables.LoadAssetAsync<T>(key).WaitForCompletion();
+                if (asset == null) Log.Error($"Failed to load the addressable asset {key}.");
+                return asset;
+            });
         }
 
         internal static bool DebugCheck()

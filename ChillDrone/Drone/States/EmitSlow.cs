@@ -1,5 +1,4 @@
 ﻿using Chen.GradiusMod;
-using Chen.GradiusMod.Compatibility;
 using Chen.GradiusMod.Items.GradiusOption;
 using Chen.GradiusMod.Items.GradiusOption.Components;
 using EntityStates;
@@ -16,7 +15,16 @@ namespace Chen.ChillDrone.Drone.States
 {
     internal class EmitSlow : BaseState
     {
-        private static FireBeam fireBeamInstance { get => new FireBeam(); }
+        // The values of FireBeam come from its EntityStateConfiguration, which is only applied to states created by the catalog.
+        private static FireBeam _fireBeamInstance;
+        private static FireBeam fireBeamInstance
+        {
+            get
+            {
+                if (_fireBeamInstance == null) _fireBeamInstance = EntityStateCatalog.InstantiateState(typeof(FireBeam)) as FireBeam;
+                return _fireBeamInstance;
+            }
+        }
         private static GameObject laserPrefab { get => fireBeamInstance.laserPrefab; }
         private static string attackSoundString { get => fireBeamInstance.attackSoundString; }
         private static float fireFrequency { get => fireBeamInstance.fireFrequency; }
@@ -27,11 +35,11 @@ namespace Chen.ChillDrone.Drone.States
         private static GameObject hitEffectPrefab { get => fireBeamInstance.hitEffectPrefab; }
 
         public static readonly float detectionDistance = 20f;
+        public static readonly float duration = 5f;
 
         private static readonly float angularDetection = 60f;
         private static readonly string muzzleString = "Muzzle";
         private static readonly float maxDistance = detectionDistance * 2f;
-        private static readonly float duration = 5f;
 
         private float stopwatch = 0f;
         private float fireTimer = 0f;
@@ -205,7 +213,7 @@ namespace Chen.ChillDrone.Drone.States
             fireTimer += Time.fixedDeltaTime;
             float num = fireFrequency * characterBody.attackSpeed;
             float num2 = 1f / num;
-            Vector3 start = muzzleTransform.position;
+            Vector3 start = muzzleTransform ? muzzleTransform.position : aimRay.origin;
             for (int i = 0; i < results.Count; i++)
             {
                 HurtBox hurtBox = results[i];
